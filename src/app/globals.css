@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+:root {
+  /* Warm stone neutrals — subtle depth, minimal contrast between layers */
+  --bg-primary: #f6f5f3;
+  --bg-surface: #fdfcfb;
+  --bg-muted: #eeece8;
+  --bg-inset: #e3e0da;
+
+  --border-primary: #d4d0c8;
+  --border-subtle: #ebe7e1;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --text-quaternary: #94a3b8;
+
+  --accent: #e86a10;
+  --accent-hover: #d45e0a;
+  --accent-subtle: #fef3eb;
+  --accent-on: #ffffff;
+
+  --semantic-success: #16a34a;
+  --semantic-success-subtle: #f0fdf4;
+  --semantic-success-border: #bbf7d0;
+  --semantic-success-text: #15803d;
+
+  --semantic-error: #dc2626;
+  --semantic-error-subtle: #fef2f2;
+  --semantic-error-border: #fecaca;
+  --semantic-error-text: #b91c1c;
+
+  --semantic-warning: #d97706;
+  --semantic-warning-subtle: #fffbeb;
+  --semantic-warning-border: #fde68a;
+  --semantic-warning-text: #92400e;
+
+  --semantic-info: #2563eb;
+  --semantic-info-subtle: #eff6ff;
+  --semantic-info-border: #bfdbfe;
+  --semantic-info-text: #1d4ed8;
+
+  --ring-accent: #f97316;
+  --ring-track: #e0dcd6;
+
+  --chart-1: #e66100;
+  --chart-2: #5d3a9b;
+  --chart-3: #1a85ff;
+  --chart-4: #d41159;
+  --chart-5: #40b0a6;
+  --chart-6: #ffc61e;
+  --chart-7: #7c4dff;
+  --chart-8: #00c49a;
+  --chart-9: #e8590c;
+  --chart-10: #9775fa;
+
+  --chart-grid: #e0dcd6;
+  --chart-axis: #64748b;
+  --chart-tooltip-bg: rgba(255, 255, 255, 0.96);
+  --chart-tooltip-border: #cbd5e1;
+  --chart-tooltip-shadow: 0 12px 30px -18px rgba(15, 23, 42, 0.85);
+  --chart-label: #0f172a;
+  --chart-legend: #475569;
+
+  --shadow-card: 0 22px 40px -32px rgba(15, 23, 42, 0.65);
+  --shadow-elevated: 0 25px 60px -40px rgba(15, 23, 42, 0.45);
+  --shadow-chart: 0 20px 45px -36px rgba(15, 23, 42, 0.85);
+
+  /* Page: whisper gradients only — rich via layering, not saturation */
+  --gradient-page:
+    radial-gradient(ellipse 85% 55% at 0% -5%, rgba(250, 245, 238, 0.95) 0%, transparent 52%),
+    radial-gradient(ellipse 70% 45% at 100% 100%, rgba(236, 242, 250, 0.45) 0%, transparent 48%),
+    linear-gradient(165deg, #faf9f7 0%, #f4f3f0 48%, #f7f6f3 100%);
+  --gradient-brand: linear-gradient(to right, #f97316, #f59e0b);
+  --gradient-decorative-warm: linear-gradient(
+    to bottom right,
+    rgba(255, 244, 232, 0.95),
+    rgba(250, 236, 220, 0.35),
+    transparent
+  );
+  --gradient-decorative-cool: linear-gradient(
+    to top right,
+    rgba(232, 240, 252, 0.9),
+    rgba(237, 246, 255, 0.3),
+    transparent
+  );
+}
+
+.dark {
+  /* Ink + charcoal — slight cool lift between tiers */
+  --bg-primary: #090a0e;
+  --bg-surface: #12131a;
+  --bg-muted: #181a22;
+  --bg-inset: #1f212c;
+
+  --border-primary: #2c2f3a;
+  --border-subtle: #1e2029;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-quaternary: #64748b;
+
+  --accent: #f59e42;
+  --accent-hover: #fbbf6a;
+  --accent-subtle: #2a1d0e;
+  --accent-on: #0c0f18;
+
+  --semantic-success: #4ade80;
+  --semantic-success-subtle: #0a1f12;
+  --semantic-success-border: #166534;
+  --semantic-success-text: #86efac;
+
+  --semantic-error: #f87171;
+  --semantic-error-subtle: #1f0a0a;
+  --semantic-error-border: #991b1b;
+  --semantic-error-text: #fca5a5;
+
+  --semantic-warning: #fbbf24;
+  --semantic-warning-subtle: #1f1a08;
+  --semantic-warning-border: #92400e;
+  --semantic-warning-text: #fde68a;
+
+  --semantic-info: #60a5fa;
+  --semantic-info-subtle: #0a1428;
+  --semantic-info-border: #1e40af;
+  --semantic-info-text: #93c5fd;
+
+  --ring-accent: #f59e42;
+  --ring-track: #2a2f42;
+
+  --chart-1: #ff8a3d;
+  --chart-2: #9b7be8;
+  --chart-3: #5ba8ff;
+  --chart-4: #f25990;
+  --chart-5: #6cd4ca;
+  --chart-6: #ffe066;
+  --chart-7: #a78bfa;
+  --chart-8: #34d9a8;
+  --chart-9: #ff9f69;
+  --chart-10: #c4b5fd;
+
+  --chart-grid: #2a2f42;
+  --chart-axis: #94a3b8;
+  --chart-tooltip-bg: rgba(21, 25, 37, 0.96);
+  --chart-tooltip-border: #2a2f42;
+  --chart-tooltip-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.85);
+  --chart-label: #f1f5f9;
+  --chart-legend: #94a3b8;
+
+  --shadow-card: 0 22px 40px -32px rgba(0, 0, 0, 0.65);
+  --shadow-elevated: 0 25px 60px -40px rgba(0, 0, 0, 0.45);
+  --shadow-chart: 0 20px 45px -36px rgba(0, 0, 0, 0.85);
+
+  --gradient-page:
+    radial-gradient(ellipse 80% 50% at 0% 0%, rgba(28, 22, 18, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 65% 42% at 100% 100%, rgba(14, 22, 38, 0.4) 0%, transparent 50%),
+    linear-gradient(168deg, #0b0c11 0%, #090a0e 45%, #0a0b10 100%);
+  --gradient-brand: linear-gradient(to right, #f59e42, #fbbf6a);
+  --gradient-decorative-warm: linear-gradient(
+    to bottom right,
+    rgba(42, 32, 26, 0.85),
+    rgba(24, 18, 14, 0.25),
+    transparent
+  );
+  --gradient-decorative-cool: linear-gradient(
+    to top right,
+    rgba(22, 32, 48, 0.8),
+    rgba(14, 18, 28, 0.28),
+    transparent
+  );
+}
+
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-muted: var(--bg-muted);
+  --color-bg-inset: var(--bg-inset);
+
+  --color-border-primary: var(--border-primary);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-quaternary: var(--text-quaternary);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-on: var(--accent-on);
+
+  --color-success: var(--semantic-success);
+  --color-success-subtle: var(--semantic-success-subtle);
+  --color-success-border: var(--semantic-success-border);
+  --color-success-text: var(--semantic-success-text);
+
+  --color-error: var(--semantic-error);
+  --color-error-subtle: var(--semantic-error-subtle);
+  --color-error-border: var(--semantic-error-border);
+  --color-error-text: var(--semantic-error-text);
+
+  --color-warning: var(--semantic-warning);
+  --color-warning-subtle: var(--semantic-warning-subtle);
+  --color-warning-border: var(--semantic-warning-border);
+  --color-warning-text: var(--semantic-warning-text);
+
+  --color-info: var(--semantic-info);
+  --color-info-subtle: var(--semantic-info-subtle);
+  --color-info-border: var(--semantic-info-border);
+  --color-info-text: var(--semantic-info-text);
+
+  --color-ring-accent: var(--ring-accent);
+  --color-ring-track: var(--ring-track);
+
+  --font-sans:
+    "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", "Nimbus Sans", sans-serif;
+  --font-display:
+    "Optima", "Avenir Next", "Gill Sans", "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+/* Gradient on `html` matches `next-themes` (classes on documentElement). */
+html {
+  min-height: 100dvh;
+  background: var(--gradient-page);
+}
+
+body {
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-on);
+}
