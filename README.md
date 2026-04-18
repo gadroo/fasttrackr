@@ -40,7 +40,7 @@ This repository is a **single-user, demo-oriented** full-stack app: there is **n
 
 ---
 
-## Quick start
+## Setup instructions (quick start)
 
 ### 1. Install dependencies
 
@@ -136,7 +136,7 @@ Exact request/response shapes are defined in the route files and shared types un
 
 ---
 
-## How it works (high level)
+## Approach (how it works)
 
 ### Spreadsheet ingestion
 
@@ -170,7 +170,7 @@ drizzle.config.ts      # Drizzle Kit configuration
 
 ---
 
-## Product assumptions and limitations
+## Assumptions and limitations
 
 These are intentional boundaries for this demo:
 
