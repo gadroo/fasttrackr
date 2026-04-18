@@ -24,7 +24,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
 
   return (
     <div className="space-y-6">
-      <header className="group relative overflow-hidden rounded-3xl border border-border-primary/80 bg-bg-surface p-7 shadow-[var(--shadow-elevated)] transition-all duration-300 hover:shadow-[var(--shadow-chart)]">
+      <header className="group relative overflow-hidden rounded-2xl border border-border-primary/80 bg-bg-surface p-5 shadow-[var(--shadow-elevated)] transition-all duration-300 hover:shadow-[var(--shadow-chart)] sm:rounded-3xl sm:p-7">
         <div className="pointer-events-none absolute -left-24 -top-24 h-60 w-60 rounded-full bg-[image:var(--gradient-decorative-warm)] blur-2xl transition-opacity duration-500 opacity-60 group-hover:opacity-80" />
         <div className="pointer-events-none absolute -bottom-28 -right-20 h-64 w-64 rounded-full bg-[image:var(--gradient-decorative-cool)] blur-2xl transition-opacity duration-500 opacity-60 group-hover:opacity-80" />
         <div className="relative max-w-3xl">
@@ -32,7 +32,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
             <div className="h-8 w-1 rounded-full bg-[image:var(--gradient-brand)]" />
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-text-tertiary">Insights</p>
           </div>
-          <h1 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-text-primary md:text-4xl">
+          <h1 className="mt-3 font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight text-text-primary sm:text-3xl md:text-4xl">
             Financial Storytelling and Data-Quality Intelligence
           </h1>
           <p className="mt-3 text-sm text-text-secondary md:text-base leading-relaxed">

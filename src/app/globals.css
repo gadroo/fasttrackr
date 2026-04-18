@@ -235,3 +235,11 @@ body {
   background: var(--accent);
   color: var(--accent-on);
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

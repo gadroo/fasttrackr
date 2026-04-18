@@ -13,14 +13,14 @@ export default async function Home() {
 
   return (
     <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-3xl border border-border-primary bg-bg-surface p-8 shadow-[var(--shadow-elevated)]">
+      <section className="relative overflow-hidden rounded-2xl border border-border-primary bg-bg-surface p-5 shadow-[var(--shadow-elevated)] sm:rounded-3xl sm:p-8">
         <div className="absolute -right-32 -top-28 h-64 w-64 rounded-full bg-[image:var(--gradient-decorative-warm)] blur-2xl" />
         <div className="relative max-w-2xl">
           <p className="text-xs uppercase tracking-[0.25em] text-text-tertiary">Advisory Workspace</p>
-          <h1 className="mt-2 font-[family-name:var(--font-display)] text-4xl font-semibold leading-tight text-text-primary">
+          <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight text-text-primary sm:text-3xl md:text-4xl">
             Household Data, Reconciled with Source-Level Provenance
           </h1>
-          <p className="mt-3 text-sm text-text-secondary">
+          <p className="mt-2 text-sm text-text-secondary sm:mt-3">
             Import spreadsheets, enrich records with advisor calls, review AI change proposals, and monitor completeness across every household.
           </p>
         </div>

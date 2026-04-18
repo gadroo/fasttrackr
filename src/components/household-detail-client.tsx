@@ -181,18 +181,18 @@ export function HouseholdDetailClient({
 
   return (
     <section className="space-y-6">
-      <header className="rounded-2xl border border-border-primary bg-bg-surface p-6">
+      <header className="rounded-2xl border border-border-primary bg-bg-surface p-4 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-text-tertiary">Household</p>
-            <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-text-primary">
+            <h1 className="break-words font-[family-name:var(--font-display)] text-2xl font-semibold text-text-primary sm:text-3xl">
               {household.name}
             </h1>
             <p className="mt-1 text-sm text-text-secondary">
               {household.address ?? "No address on file"}
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="grid w-full grid-cols-2 gap-2 text-sm sm:w-auto">
             <Stat title="Income" value={formatCurrency(household.income)} />
             <Stat title="Net Worth" value={formatCurrency(household.totalNetWorth)} />
             <Stat title="Completeness" value={formatPercent(household.completenessScore)} />
@@ -201,20 +201,22 @@ export function HouseholdDetailClient({
         </div>
       </header>
 
-      <div className="flex flex-wrap gap-2 rounded-xl border border-border-primary bg-bg-surface p-2">
-        {tabs.map(([tabKey, label]) => (
-          <button
-            key={tabKey}
-            onClick={() => setActiveTab(tabKey)}
-            className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-              activeTab === tabKey
-                ? "bg-text-primary text-bg-surface"
-                : "text-text-secondary hover:bg-bg-muted"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="-mx-4 overflow-x-auto px-4 scrollbar-hide sm:-mx-0 sm:px-0">
+        <div className="inline-flex min-w-full gap-1.5 rounded-xl border border-border-primary bg-bg-surface p-1.5 sm:gap-2 sm:p-2">
+          {tabs.map(([tabKey, label]) => (
+            <button
+              key={tabKey}
+              onClick={() => setActiveTab(tabKey)}
+              className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold transition sm:text-sm ${
+                activeTab === tabKey
+                  ? "bg-text-primary text-bg-surface"
+                  : "text-text-secondary hover:bg-bg-muted"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {activeTab === "overview" && (

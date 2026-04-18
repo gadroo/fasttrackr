@@ -18,7 +18,7 @@ export default function RootLayout({
       <body className="flex min-h-dvh flex-col text-text-primary antialiased">
         <ThemeProvider>
           <Header />
-          <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">{children}</main>
+          <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-8">{children}</main>
         </ThemeProvider>
       </body>
     </html>
