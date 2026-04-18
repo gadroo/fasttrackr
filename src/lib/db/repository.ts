@@ -26,7 +26,13 @@ import {
   decodeProposalValueForDisplay,
 } from "@/lib/import/proposal-values";
 import { castProposalFieldValue } from "@/lib/db/value-casting";
-import { formatTimeWindow, parseDate, parseExpenseRange } from "@/lib/utils";
+import {
+  compareHouseholdMembersForDisplay,
+  formatTimeWindow,
+  normalizeMemberEmailList,
+  parseDate,
+  parseExpenseRange,
+} from "@/lib/utils";
 
 const COMPLETENESS_KEYS = [
   "income",
@@ -305,6 +311,8 @@ export async function getHouseholdDetail(
     isBusinessEntity: boolean;
   }>).filter(m => m !== null);
 
+  members.sort(compareHouseholdMembersForDisplay);
+
   const accounts = (row.accounts as Array<{
     id: string;
     memberId: string;
@@ -443,13 +451,14 @@ export async function getHouseholdDetail(
         relationship: (member.relationship ?? "other") as
           | "primary"
           | "spouse"
+          | "ex_spouse"
           | "child"
           | "parent"
           | "business_entity"
           | "other",
         dob: member.dob ?? member.dobRaw,
         phone: member.phone,
-        email: member.email,
+        email: normalizeMemberEmailList(member.email),
         address: member.address,
         occupation: member.occupation,
         employer: member.employer,

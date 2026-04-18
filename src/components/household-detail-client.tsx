@@ -12,7 +12,13 @@ import type {
   HouseholdDetail,
   MemberDetail,
 } from "@/lib/types";
-import { formatCurrency, formatDate, formatPercent, formatSeconds } from "@/lib/utils";
+import {
+  compareHouseholdMembersForDisplay,
+  formatCurrency,
+  formatDate,
+  formatPercent,
+  formatSeconds,
+} from "@/lib/utils";
 
 type TabKey =
   | "overview"
@@ -149,19 +155,10 @@ export function HouseholdDetailClient({
     }
   };
 
-  const groupedMembers = useMemo(() => {
-    const order: Record<string, number> = {
-      primary: 0,
-      spouse: 1,
-      child: 2,
-      parent: 3,
-      other: 4,
-      business_entity: 5,
-    };
-    return [...household.members].sort(
-      (a, b) => (order[a.relationship] ?? 99) - (order[b.relationship] ?? 99),
-    );
-  }, [household.members]);
+  const groupedMembers = useMemo(
+    () => [...household.members].sort(compareHouseholdMembersForDisplay),
+    [household.members],
+  );
 
   const businessMembers = groupedMembers.filter(
     (m) => m.relationship === "business_entity",
@@ -599,6 +596,8 @@ function MemberCard({ member, isBusiness = false }: { member: MemberDetail; isBu
         return "success" as const;
       case "spouse":
         return "info" as const;
+      case "ex_spouse":
+        return "warning" as const;
       case "business_entity":
         return "warning" as const;
       default:

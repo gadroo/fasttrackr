@@ -14,7 +14,7 @@ import {
   sourceArtifacts,
 } from "@/lib/db/schema";
 import { encodeProposalValue } from "@/lib/import/proposal-values";
-import { formatSeconds, normalizeString, parseCurrency } from "@/lib/utils";
+import { formatSeconds, normalizeMemberEmailList, normalizeString, parseCurrency } from "@/lib/utils";
 
 type MergeOperation = "set" | "update" | "append" | "remove" | "confirm";
 type FactSpeaker = "wealth_manager" | "client_member" | "unknown";
@@ -847,13 +847,16 @@ async function applyTranscriptStructuralInferences(
   }
 
   if (/\bdivorc/.test(lower)) {
-    const spouse = existingMembers.find((member) => normalizeString(member.relationship) === "spouse");
-    if (!spouse) {
+    const hasPartnerRecord = existingMembers.some((member) => {
+      const rel = normalizeString(member.relationship);
+      return rel === "spouse" || rel === "ex_spouse";
+    });
+    if (!hasPartnerRecord) {
       await db.insert(members).values({
         householdId,
         firstName: AUTO_EX_SPOUSE_NAME,
         lastName: primary.lastName,
-        relationship: "spouse",
+        relationship: "ex_spouse",
       });
     }
   }
@@ -1328,10 +1331,10 @@ async function findSingleMemberForHousehold(db: DbClient, householdId: string) {
 function compareFact(mapping: FactMapping, fact: Fact): CompareDecision {
   let proposedValue = deriveProposedValue(fact, mapping.currentValue);
   if (mapping.fieldName === "email") {
-    const normalizedCurrent = canonicalizeEmailList(
+    const normalizedCurrent = normalizeMemberEmailList(
       mapping.currentValue === null || mapping.currentValue === undefined ? null : String(mapping.currentValue),
     );
-    const normalizedNext = canonicalizeEmailList(proposedValue);
+    const normalizedNext = normalizeMemberEmailList(proposedValue);
     proposedValue =
       fact.operation === "append"
         ? mergeEmailLists(normalizedCurrent, normalizedNext)
@@ -1464,8 +1467,8 @@ function areValuesEquivalent(
   fieldName: string,
 ) {
   if (fieldName === "email") {
-    const currentEmail = canonicalizeEmailList(current === null || current === undefined ? null : String(current));
-    const nextEmail = canonicalizeEmailList(next);
+    const currentEmail = normalizeMemberEmailList(current === null || current === undefined ? null : String(current));
+    const nextEmail = normalizeMemberEmailList(next);
     return currentEmail === nextEmail;
   }
   if (next === null) {
@@ -1484,27 +1487,12 @@ function areValuesEquivalent(
   return currentNormalized === nextNormalized;
 }
 
-function canonicalizeEmailList(value: string | null | undefined): string | null {
-  const normalized = normalizeOptionalString(value);
-  if (!normalized) {
-    return null;
-  }
-  const tokens = normalized.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) ?? [];
-  if (!tokens.length) {
-    return normalized;
-  }
-  return Array.from(new Set(tokens.map((token) => token.toLowerCase()))).join("; ");
-}
-
 function mergeEmailLists(current: string | null, next: string | null): string | null {
-  const tokens = [
-    ...(current?.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) ?? []),
-    ...(next?.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) ?? []),
-  ].map((token) => token.toLowerCase());
-  if (!tokens.length) {
-    return next;
-  }
-  return Array.from(new Set(tokens)).join("; ");
+  const merged = [current, next]
+    .map((v) => (v === null || v === undefined ? "" : String(v).trim()))
+    .filter(Boolean)
+    .join("; ");
+  return normalizeMemberEmailList(merged || null);
 }
 
 function isEmptyValue(value: string | number | null | undefined) {

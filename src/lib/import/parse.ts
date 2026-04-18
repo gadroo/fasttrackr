@@ -53,7 +53,14 @@ export type ParsedImportRow = {
   beneficiary2Dob: Date | null;
   ownershipType: "sole" | "joint" | "trust" | "business" | "custodial" | null;
   ownershipPct: number | null;
-  relationship: "primary" | "spouse" | "child" | "parent" | "business_entity" | "other";
+  relationship:
+    | "primary"
+    | "spouse"
+    | "ex_spouse"
+    | "child"
+    | "parent"
+    | "business_entity"
+    | "other";
   isBusinessEntity: boolean;
   investmentExperience: Record<string, number | null>;
   expenseRange: string | null;
@@ -283,10 +290,14 @@ function inferRelationship(input: {
     return "business_entity";
   }
 
+  const first = normalizeNameForMatch(input.firstName);
+  if (first === "ex spouse" || /^ex[-\s]spouse$/i.test(input.firstName.trim())) {
+    return "ex_spouse";
+  }
+
   const normalizedHousehold = normalizeNameForMatch(input.householdName);
   const tokens = normalizedHousehold.split(" ").filter(Boolean);
   if (tokens.length >= 3) {
-    const first = normalizeNameForMatch(input.firstName);
     if (first === tokens[0]) {
       return "primary";
     }

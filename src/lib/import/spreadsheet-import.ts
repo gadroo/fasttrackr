@@ -15,7 +15,12 @@ import {
   sourceArtifacts,
 } from "@/lib/db/schema";
 import { parseWorkbook, type ParsedImportRow } from "@/lib/import/parse";
-import { levenshtein, normalizeNameForMatch, normalizeString } from "@/lib/utils";
+import {
+  levenshtein,
+  normalizeMemberEmailList,
+  normalizeNameForMatch,
+  normalizeString,
+} from "@/lib/utils";
 
 type ImportResult = {
   importJobId: string;
@@ -466,7 +471,7 @@ async function resolveMember(
         dob: row.dob,
         dobRaw: row.dobRaw,
         phone: row.phone,
-        email: row.email,
+        email: normalizeMemberEmailList(row.email),
         address: row.address,
         occupation: row.occupation,
         employer: row.employer,
@@ -839,11 +844,16 @@ async function applyOrProposeFieldChange<TPatch extends Record<string, unknown>>
   if (nextValue === null || nextValue === undefined || nextValue === "") {
     return;
   }
-  if (isSameValue(currentValue, nextValue)) {
+  const normalizedNext =
+    fieldName === "email" ? normalizeMemberEmailList(String(nextValue)) : nextValue;
+  if (fieldName === "email" && !normalizedNext) {
+    return;
+  }
+  if (isSameValue(currentValue, normalizedNext, fieldName)) {
     return;
   }
   if (currentValue === null || currentValue === undefined || currentValue === "") {
-    patch[patchKey] = nextValue as TPatch[keyof TPatch];
+    patch[patchKey] = normalizedNext as TPatch[keyof TPatch];
     queueProvenance(ctx, {
       targetTable,
       targetId,
@@ -856,7 +866,7 @@ async function applyOrProposeFieldChange<TPatch extends Record<string, unknown>>
   }
 
   const oldValue = String(currentValue);
-  const newValue = String(nextValue);
+  const newValue = String(normalizedNext);
   const proposalKey = makeProposalKey(targetTable, targetId, fieldName, oldValue, newValue);
   if (ctx.pendingProposalKeys.has(proposalKey)) {
     return;
@@ -918,7 +928,12 @@ async function flushQueuedProvenance(ctx: ImportContext) {
     });
 }
 
-function isSameValue(currentValue: unknown, nextValue: unknown) {
+function isSameValue(currentValue: unknown, nextValue: unknown, fieldName?: string) {
+  if (fieldName === "email") {
+    const a = normalizeMemberEmailList(String(currentValue ?? ""));
+    const b = normalizeMemberEmailList(String(nextValue ?? ""));
+    return (a ?? "") === (b ?? "");
+  }
   if (typeof currentValue === "number" && typeof nextValue === "number") {
     return Math.abs(currentValue - nextValue) < 1e-9;
   }

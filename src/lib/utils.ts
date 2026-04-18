@@ -180,6 +180,82 @@ export function levenshtein(a: string, b: string) {
   return matrix[a.length][b.length];
 }
 
+/** Collapse duplicate addresses in a semicolon-separated list (case-insensitive). */
+export function normalizeMemberEmailList(value: string | null | undefined): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  const text = String(value).trim();
+  if (!text) {
+    return null;
+  }
+  const tokens = text.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) ?? [];
+  if (!tokens.length) {
+    return text;
+  }
+  return Array.from(new Set(tokens.map((token) => token.toLowerCase()))).join("; ");
+}
+
+export type HouseholdMemberSortInput = {
+  relationship: string | null;
+  firstName: string;
+  lastName: string | null;
+  dob: string | Date | null;
+};
+
+const RELATIONSHIP_DISPLAY_ORDER: Record<string, number> = {
+  primary: 0,
+  spouse: 1,
+  ex_spouse: 2,
+  child: 3,
+  parent: 4,
+  other: 5,
+  business_entity: 6,
+};
+
+function childOrdinalFromFirstName(firstName: string): number | null {
+  const trimmed = firstName.trim();
+  const labeled = trimmed.match(/^(?:child|kid)\s*(\d+)\s*$/i);
+  if (labeled) {
+    const n = Number(labeled[1]);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
+
+/** Stable ordering for household members: relationship, then child index / DOB, then name. */
+export function compareHouseholdMembersForDisplay(
+  a: HouseholdMemberSortInput,
+  b: HouseholdMemberSortInput,
+): number {
+  const ar =
+    RELATIONSHIP_DISPLAY_ORDER[normalizeString(a.relationship)] ?? 99;
+  const br =
+    RELATIONSHIP_DISPLAY_ORDER[normalizeString(b.relationship)] ?? 99;
+  if (ar !== br) {
+    return ar - br;
+  }
+
+  const relA = normalizeString(a.relationship);
+  const relB = normalizeString(b.relationship);
+  if (relA === "child" && relB === "child") {
+    const ordA = childOrdinalFromFirstName(a.firstName);
+    const ordB = childOrdinalFromFirstName(b.firstName);
+    if (ordA !== null && ordB !== null && ordA !== ordB) {
+      return ordA - ordB;
+    }
+    const ad = a.dob ? new Date(a.dob as Date).getTime() : NaN;
+    const bd = b.dob ? new Date(b.dob as Date).getTime() : NaN;
+    if (!Number.isNaN(ad) && !Number.isNaN(bd) && ad !== bd) {
+      return ad - bd;
+    }
+  }
+
+  const an = `${a.firstName} ${a.lastName ?? ""}`.trim().toLowerCase();
+  const bn = `${b.firstName} ${b.lastName ?? ""}`.trim().toLowerCase();
+  return an.localeCompare(bn);
+}
+
 export function parseExpenseRange(value: string | null | undefined): number | null {
   if (!value) {
     return null;

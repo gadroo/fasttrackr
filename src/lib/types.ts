@@ -47,6 +47,7 @@ export type MemberDetail = {
   relationship:
     | "primary"
     | "spouse"
+    | "ex_spouse"
     | "child"
     | "parent"
     | "business_entity"
