@@ -43,3 +43,11 @@ next-env.d.ts
 # development artifacts
 /.playwright-cli/
 /plans/
+
+# Local-only agent tooling (skills, symlinks, lockfile) — not published to GitHub
+/.agents/
+/.claude/
+/.windsurf/
+/skills-lock.json
+/AGENTS.md
+/CLAUDE.md
